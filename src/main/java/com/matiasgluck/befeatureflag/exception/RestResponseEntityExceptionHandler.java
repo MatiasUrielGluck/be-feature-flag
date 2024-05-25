@@ -21,4 +21,13 @@ public class RestResponseEntityExceptionHandler
         return handleExceptionInternal(ex, bodyOfResponse,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+    @ExceptionHandler(value
+            = { UserAlreadyExistsException.class })
+    protected ResponseEntity<Object> handleUserAlreadyExists(
+            RuntimeException ex, WebRequest request) {
+        String bodyOfResponse = "User already exists.";
+        return handleExceptionInternal(ex, bodyOfResponse,
+                new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
 }

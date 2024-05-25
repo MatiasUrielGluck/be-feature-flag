@@ -2,11 +2,14 @@ package com.matiasgluck.befeatureflag.service;
 
 import com.matiasgluck.befeatureflag.dto.AuthRequestDTO;
 import com.matiasgluck.befeatureflag.entity.User;
+import com.matiasgluck.befeatureflag.exception.UserAlreadyExistsException;
 import com.matiasgluck.befeatureflag.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -32,6 +35,9 @@ public class AuthenticationService {
                 .email(input.getEmail())
                 .password(passwordEncoder.encode(input.getPassword()))
                 .build();
+
+        Optional<User> existingUser = userRepository.findByEmail(input.getEmail());
+        if (existingUser.isPresent()) throw new UserAlreadyExistsException(user.getEmail());
 
         return userRepository.save(user);
     }
