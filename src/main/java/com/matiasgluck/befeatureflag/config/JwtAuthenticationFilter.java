@@ -1,5 +1,6 @@
 package com.matiasgluck.befeatureflag.config;
 
+import com.matiasgluck.befeatureflag.exception.JwtFilterException;
 import com.matiasgluck.befeatureflag.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -71,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
-            handlerExceptionResolver.resolveException(request, response, null, exception);
+            handlerExceptionResolver.resolveException(request, response, null, new JwtFilterException("Token error"));
         }
     }
 }

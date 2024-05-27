@@ -14,6 +14,15 @@ public class RestResponseEntityExceptionHandler
         extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value
+            = { JwtFilterException.class })
+    protected ResponseEntity<Object> handleSignatureException(
+            RuntimeException ex, WebRequest request) {
+        String bodyOfResponse = "Invalid token.";
+        return handleExceptionInternal(ex, bodyOfResponse,
+                new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+
+    @ExceptionHandler(value
             = { PropertyValueException.class })
     protected ResponseEntity<Object> handleBadRequest(
             RuntimeException ex, WebRequest request) {
