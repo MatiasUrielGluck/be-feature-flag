@@ -38,6 +38,9 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @Column(name = "api_key", unique = true)
+    private String apiKey;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

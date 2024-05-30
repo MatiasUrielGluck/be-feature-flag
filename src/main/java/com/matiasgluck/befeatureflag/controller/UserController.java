@@ -1,6 +1,7 @@
 package com.matiasgluck.befeatureflag.controller;
 
 import com.matiasgluck.befeatureflag.dto.AccountInfoResponseDTO;
+import com.matiasgluck.befeatureflag.dto.RenewKeyResponseDTO;
 import com.matiasgluck.befeatureflag.entity.User;
 import com.matiasgluck.befeatureflag.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,13 @@ public class UserController {
                 .fullName(currentUser.getFullName())
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/renew-key")
+    public ResponseEntity<RenewKeyResponseDTO> renewKey() {
+        RenewKeyResponseDTO newKeyResponse = RenewKeyResponseDTO.builder()
+                .newKey(userService.renewApiKey())
+                .build();
+        return ResponseEntity.ok(newKeyResponse);
     }
 }
