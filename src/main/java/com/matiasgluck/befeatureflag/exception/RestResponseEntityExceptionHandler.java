@@ -1,5 +1,7 @@
 package com.matiasgluck.befeatureflag.exception;
 
+import com.matiasgluck.befeatureflag.dto.ErrorResponseDTO;
+import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.PropertyValueException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,5 +40,27 @@ public class RestResponseEntityExceptionHandler
         String bodyOfResponse = "User already exists.";
         return handleExceptionInternal(ex, bodyOfResponse,
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(value
+            = { EntityAlreadyExistsException.class })
+    protected ResponseEntity<Object> handleEntityAlreadyExists(
+            RuntimeException ex, WebRequest request) {
+        ErrorResponseDTO bodyOfResponse = ErrorResponseDTO.builder()
+                .error(ex.getMessage())
+                .build();
+        return handleExceptionInternal(ex, bodyOfResponse,
+                new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(value
+            = { EntityNotFoundException.class })
+    protected ResponseEntity<Object> handleEntityNotFound(
+            RuntimeException ex, WebRequest request) {
+        ErrorResponseDTO bodyOfResponse = ErrorResponseDTO.builder()
+                .error(ex.getMessage())
+                .build();
+        return handleExceptionInternal(ex, bodyOfResponse,
+                new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 }
